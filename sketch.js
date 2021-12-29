@@ -1,4 +1,6 @@
-var bow , arrow,  scene;
+console.log("Ballon Buster 1 by Nikhil. Advancements such as scoring system and the removing of decals after the gamestate becomes 'end' are in the next project: Ballon Buster 2.")
+
+var bow , arrow,  scene ,redB, blueB,pinkB,redB,arrowGroup;
 var bowImage, arrowImage, green_balloonImage, red_balloonImage, pink_balloonImage ,blue_balloonImage, backgroundImage;
 
 var score=0;
@@ -11,7 +13,7 @@ function preload(){
   pink_balloonImage = loadImage("pink_balloon0.png");
   blue_balloonImage = loadImage("blue_balloon0.png");
   red_balloonImage = loadImage("red_balloon0.png");
-  
+   
 }
 
 
@@ -19,38 +21,43 @@ function preload(){
 function setup() {
   createCanvas(400, 400);
   
-  //creating background
+  
   scene = createSprite(0,0,400,400);
   scene.addImage(backgroundImage);
   scene.scale = 2.5
   
-  // creating bow to shoot arrow
+ 
   bow = createSprite(380,220,20,50);
   bow.addImage(bowImage); 
   bow.scale = 1;
   
-   score = 0    
+   score = 0;
+   redB= new Group();
+   greenB= new Group();
+   blueB= new Group();
+   pinkB= new Group();
+   arrowGroup= new Group();     
 }
 
 function draw() {
  background(0);
-  // moving ground
+  
     scene.velocityX = -3 
 
     if (scene.x < 0){
       scene.x = scene.width/2;
     }
   
-  //moving bow
+  
   bow.y = mouseY
   
-   // release arrow when space key is pressed
+
   if (keyDown("space")) {
     createArrow();
     
   }
    
-  //creating continous enemies
+  
 
 var select_balloon = Math.round(random(1,4));
  
@@ -71,7 +78,7 @@ var select_balloon = Math.round(random(1,4));
 }
 
 
-// Creating  arrows for bow
+
  function createArrow() {
   var arrow= createSprite(100, 100, 60, 10);
   arrow.addImage(arrowImage);
@@ -80,19 +87,55 @@ var select_balloon = Math.round(random(1,4));
   arrow.velocityX = -4;
   arrow.lifetime = 100;
   arrow.scale = 0.3;
-  if(arrow.isTouching(red)||arrow.isTouching(blue)){
-  red.velocityX = 0
-    blue.velocityY = 0
-    text("Game end", score,200,200)
-
+  
+  if (arrowGroup.isTouching(greenB)) {
+    
+    greenB.destroyEach();
+    arrowGroup.destroyEach();
+    score=score+1;
+    
   }
-  if(arrow.isTouching(green) || arrow.isTouching(pink)){
-    pink.velocityX = 0
-    green.velocityX = 0
-    text("Game end",score,200,200)
-  }
-}
 
+  if (arrowGroup.isTouching(blueB)) {
+    
+    blueB.destroyEach();
+    arrowGroup.destroyEach();
+    score=score+1;
+    
+  }
+
+  if (arrowGroup.isTouching(pinkB)) {
+    
+    pinkB.destroyEach();
+    arrowGroup.destroyEach();
+    score=score+1;
+    
+  }
+  if (arrowGroup.isTouching(redB)) {
+    
+    redB.destroyEach();
+    arrowGroup.destroyEach();
+    score=score+1;
+    
+  }
+  }
+
+  // PROBLEM: "Pink isn't defined but it is. Type errors apparently present but in p5 file."
+  // PROBELM RESOLVED but question remains.
+
+
+  //if(arrow.isTouching(red)||arrow.isTouching(blue)){
+    //red.velocityX = 0
+   // blue.velocityY = 0
+    //text("Game end", score,200,200)
+
+  
+  //if(arrow.isTouching(green) || arrow.isTouching(pink)){
+    //pink.velocityX = 0
+    //green.velocityX = 0
+    //text("Game end",score,200,200)
+  //}
+ 
 
 
 function redBalloon() {
@@ -101,6 +144,7 @@ function redBalloon() {
   red.velocityX = 2;
   red.lifetime = 150;
   red.scale = 0.1;
+  redB.add(red)
  }
 
 
@@ -112,6 +156,7 @@ function blueBalloon() {
   blue.velocityX = 7;
   blue.lifetime = 150;
   blue.scale = 0.1;
+  blueB.add(blue)
 }
 
 function greenBalloon() {
@@ -120,6 +165,7 @@ function greenBalloon() {
   green.velocityX = 3;
   green.lifetime = 150;
   green.scale = 0.1;
+  greenB.add(green)
 }
 
 function pinkBalloon() {
@@ -128,4 +174,5 @@ function pinkBalloon() {
   pink.velocityX = 5;
   pink.lifetime = 150;
   pink.scale = 1
+  pinkB.add(pink)
 }
